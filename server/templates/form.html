@@ -6,18 +6,17 @@
 </head>
 <body>
   <div class="well">
-  <form class="form-horizontal">
+  <form class="form-horizontal" method="post" action="/">
   <fieldset>
 
   <!-- Form Name -->
-  <legend>Register for free Wifi</legend>
+  <legend>Register for Free Wifi</legend>
 
   <!-- Text input-->
   <div class="form-group">
     <label class="col-md-4 control-label" for="name">Full Name</label>
     <div class="col-md-4">
-    <input id="name" name="name" type="text" placeholder="John Doe" class="form-control input-md" required="">
-
+    <input id="name" name="name" type="text" placeholder="John Doe" class="form-control input-md" >
     </div>
   </div>
 
@@ -25,7 +24,7 @@
   <div class="form-group">
     <label class="col-md-4 control-label" for="email">Email</label>
     <div class="col-md-4">
-    <input id="email" name="email" type="text" placeholder="email" class="form-control input-md" required="">
+    <input id="email" name="email" type="text" placeholder="email" class="form-control input-md" >
     </div>
   </div>
 
@@ -35,10 +34,11 @@
     <div class="col-md-4">
     <div id="robotcheck" name="robotcheck" placeholder="">
       <div class="question">
-        <div class="row"><img class="questionimage" src="https://placekitten.com/300/300"/></div>
+        <input type="hidden" name="ans" value="{{answer}}"/>
+        <div class="row"><img class="questionimage" src="data:image/png;base64,{{image|safe}}"/></div>
         <div class="row questionrow">
-          <button id="next" name="next" class="btn btn-success">Yes</button>
-          <button id="prev" name="prev" class="btn btn-danger">No</button>
+          <button id="yes" name="yes" value="1" class="btn btn-success">Yes</button>
+          <button id="no" name="no" value="1" class="btn btn-danger">No</button>
         </div>
       </div>
     </div>
