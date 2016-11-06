@@ -9,13 +9,13 @@ question_count = 3 # Warning, may break at double digits!!
 
 weights = {'true':1,'false':1,'unknown':2}
 
-images = [(['a pole','wires','a building'],'pole.png'),(['a building','a pole'],'building.png'),(['a tree','a building'],'tree.png'),(['wires','a pole'],'wires.png')]
+images = [(['a pole','wires','a building'],'pole.png'),(['a building','a pole'],'building.png'),(['vegetation','a building'],'tree.png'),(['wires','a pole'],'wires.png')]
 
 unknown_images = ['vague.png']
 
 done = []
 
-multichoice_choices = ["a pole","a building","a tree","wires"]
+multichoice_choices = ["a pole","a building","vegetation","wires"]
 
 def decode_answer(name):
     for k,v in images:
