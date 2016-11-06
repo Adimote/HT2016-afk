@@ -34,18 +34,19 @@ def _get_select(option,value):
 def gen_final(uid):
     return """
 <div class="question" id="q{}">
-    <h1> THANKS FOR PARTICIPATING </h1>
+    <h1> Thank you for participating</h1>
+    <p>You will be redirected shortly</h1>
 </div>
 """.format(uid)
 
 def gen_dropdown(uid,image_b64,ans):
-    question = "What can you see the most here?"
+    question = "What is prominent in this image?"
     selects = "".join([_get_select(v,i) for i,v in enumerate(multichoice_choices)])
     return """
 <div class="question" id="q{id}">
     <input type="hidden" name="{id}ans" value="{answer}"/>
     <div class="row questionrow">
-        {question}
+        <h3>{question}</h3>
     </div>
     <div class="row">
         <img class="questionimage" src="data:image/png;base64,{image}"/>
@@ -65,7 +66,7 @@ def gen_yesno(uid,image_b64,ans,ask):
     <input type="hidden" name="{id}ans" value="{answer}"/>
     <input type="hidden" name="{id}ask" value="{ask}"/>
     <div class="row questionrow">
-        {question}
+        <h3>{question}</h3>
     </div>
     <div class="row">
         <img class="questionimage" src="data:image/png;base64,{image}"/>
@@ -138,7 +139,7 @@ def captcha_form():
         print("Received post")
         if process_answer(request.form):
             print("Correct!")
-            return redirect(url_for('correct'))
+            return redirect("https://google.com")
         else:
             print("False!")
             tried = True

@@ -7,17 +7,26 @@
 </head>
 <body>
   <div class="well">
-  <form class="form-horizontal" method="post" action="/">
+
+  {% if tried %}
+  <div class="alert alert-danger" role="alert">
+  <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+  <span class="sr-only">Error:</span>
+    You incorrectly identified an image, please try again
+  </div>
+  {% endif %}
+
+  <form id="form" class="form-horizontal" method="post" action="/">
   <fieldset>
 
   <!-- Form Name -->
-  <legend>Register for Free Wifi</legend>
+  <legend>Register to get Free WIFI</legend>
 
   <!-- Text input-->
   <div class="form-group">
     <label class="col-md-4 control-label" for="name">Full Name</label>
     <div class="col-md-4">
-    <input id="name" name="name" type="text" placeholder="John Doe" class="form-control input-md" >
+    <input id="name" name="name" type="text" placeholder="e.g: Christopher Wiseman" class="form-control input-md" >
     </div>
   </div>
 
@@ -25,7 +34,7 @@
   <div class="form-group">
     <label class="col-md-4 control-label" for="email">Email</label>
     <div class="col-md-4">
-    <input id="email" name="email" type="text" placeholder="email" class="form-control input-md" >
+    <input id="email" name="email" type="text" placeholder="e.g: someone@example.com" class="form-control input-md" >
     </div>
   </div>
 
@@ -33,20 +42,13 @@
   <div class="form-group">
     <label class="col-md-4 control-label" for="robotcheck">Robot Check</label>
     <div class="col-md-4">
-    <div id="robotcheck" name="robotcheck" placeholder="">
-      {{questions|safe}}
-    </div>
-    <span class="help-block">Help us collect data on our railway</span>
+      <span class="help-block">Help us collect data on our railway</span>
+      <div id="robotcheck" name="robotcheck">
+        {{questions|safe}}
+      </div>
     </div>
   </div>
 
-  <!-- Button -->
-  <div class="form-group">
-    <label class="col-md-4 control-label" for="register"></label>
-    <div class="col-md-4">
-      <button id="register" name="register" class="btn btn-success">Register</button>
-    </div>
-  </div>
 
   </fieldset>
   </form>
