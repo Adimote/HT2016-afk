@@ -9,10 +9,11 @@ question_count = 3 # Warning, may break at double digits!!
 
 weights = {'true':1,'false':1,'unknown':2}
 
-# images = [('a pole','pole.png'),('a signal','signal.png')]
 images = [(['a pole','wires','a building'],'pole.png'),(['a building','a pole'],'building.png'),(['a tree','a building'],'tree.png'),(['wires','a pole'],'wires.png')]
 
 unknown_images = ['vague.png']
+
+done = []
 
 multichoice_choices = ["a pole","a building","a tree","wires"]
 
@@ -34,7 +35,7 @@ def _get_select(option,value):
 def gen_final(uid):
     return """
 <div class="question" id="q{}">
-    <h1> Thank you for participating</h1>
+    <h1> Thank you for registering</h1>
     <p>You will be redirected shortly</h1>
 </div>
 """.format(uid)
@@ -147,14 +148,17 @@ def captcha_form():
 
     #Generate the questions
     questions = []
-    for uid in range(question_count):
+    while len(questions) < question_count:
+        uid = len(questions)
         image, ask, t, f, u = decide_image()
         with open("images/"+image, "rb") as image_file:
             encoded_string = str(base64.b64encode(image_file.read()))[2:-1]
             if random.randint(0,1):
-                questions.append(gen_yesno(uid, encoded_string, image, ask))
+                if (image,ask) not in done:
+                    questions.append(gen_yesno(uid, encoded_string, image, ask))
             else:
-                questions.append(gen_dropdown(uid, encoded_string, image))
+                if (image) not in done:
+                    questions.append(gen_dropdown(uid, encoded_string, image))
     questions.append(gen_final(uid+1))
     return render_template("form.html",tried=tried, answer=image, questions="".join(questions))
 
