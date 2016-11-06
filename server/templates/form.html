@@ -1,8 +1,9 @@
 <html>
 <head>
-<link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
-<link rel="stylesheet" href="{{ url_for('static', filename='css/captcha.css') }}">
-
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/captcha.css') }}">
+  <script src="{{ url_for('static', filename='js/jquery-3.1.1.min.js')}}"> </script>
+  <script src="{{ url_for('static', filename='js/captcha.js')}}"> </script>
 </head>
 <body>
   <div class="well">
@@ -33,14 +34,7 @@
     <label class="col-md-4 control-label" for="robotcheck">Robot Check</label>
     <div class="col-md-4">
     <div id="robotcheck" name="robotcheck" placeholder="">
-      <div class="question">
-        <input type="hidden" name="ans" value="{{answer}}"/>
-        <div class="row"><img class="questionimage" src="data:image/png;base64,{{image|safe}}"/></div>
-        <div class="row questionrow">
-          <button id="yes" name="yes" value="1" class="btn btn-success">Yes</button>
-          <button id="no" name="no" value="1" class="btn btn-danger">No</button>
-        </div>
-      </div>
+      {{questions|safe}}
     </div>
     <span class="help-block">Help us collect data on our railway</span>
     </div>
