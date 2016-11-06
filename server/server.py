@@ -5,7 +5,7 @@ import json
 from flask import Flask, render_template, request, redirect, url_for
 app = Flask(__name__)
 
-question_count = 5 # Warning, may break at double digits!!
+question_count = 3 # Warning, may break at double digits!!
 
 weights = {'true':1,'false':1,'unknown':2}
 
@@ -30,6 +30,14 @@ def _get_select(option,value):
     return """
 <option value={value}>{option}</option>""".format(option=option, value=value)
 
+
+def gen_final(uid):
+    return """
+<div class="question" id="q{}">
+    <h1> THANKS FOR PARTICIPATING </h1>
+</div>
+""".format(uid)
+
 def gen_dropdown(uid,image_b64,ans):
     question = "What can you see the most here?"
     selects = "".join([_get_select(v,i) for i,v in enumerate(multichoice_choices)])
@@ -51,7 +59,7 @@ def gen_dropdown(uid,image_b64,ans):
 </div>""".format(answer=ans, question=question, id=uid, image=image_b64, selects=selects)
 
 def gen_yesno(uid,image_b64,ans,ask):
-    question = "Do the following points resemble {}?".format(ask)
+    question = "Can you see {} in this picture?".format(ask)
     return """
 <div class="question" id="q{id}">
     <input type="hidden" name="{id}ans" value="{answer}"/>
@@ -108,7 +116,6 @@ def process_answer(data):
                     pass
                     # Correct!
                 elif answer not in keys:
-                    print("Key:", key, "Answer:", answer)
                     good_so_far = False
                     break
 
@@ -147,6 +154,7 @@ def captcha_form():
                 questions.append(gen_yesno(uid, encoded_string, image, ask))
             else:
                 questions.append(gen_dropdown(uid, encoded_string, image))
+    questions.append(gen_final(uid+1))
     return render_template("form.html",tried=tried, answer=image, questions="".join(questions))
 
 def decide_image():
