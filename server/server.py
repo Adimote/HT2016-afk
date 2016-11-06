@@ -5,15 +5,16 @@ import json
 from flask import Flask, render_template, request, redirect, url_for
 app = Flask(__name__)
 
-question_count = 1 # Warning, may break at double digits!!
+question_count = 5 # Warning, may break at double digits!!
 
 weights = {'true':1,'false':1,'unknown':2}
 
-images = [('a pole','pole.png'),('a signal','signal.png')]
+# images = [('a pole','pole.png'),('a signal','signal.png')]
+images = [(['a pole','wires','a building'],'pole.png'),(['a building','a pole'],'building.png'),(['a tree','a building'],'tree.png'),(['wires','a pole'],'wires.png')]
 
-unknown_images = ['dunno.png']
+unknown_images = ['vague.png']
 
-multichoice_choices = ["a pole","a signal","wires","a train"]
+multichoice_choices = ["a pole","a building","a tree","wires"]
 
 def decode_answer(name):
     for k,v in images:
@@ -30,7 +31,7 @@ def _get_select(option,value):
 <option value={value}>{option}</option>""".format(option=option, value=value)
 
 def gen_dropdown(uid,image_b64,ans):
-    question = "What does this pattern of points look like?"
+    question = "What can you see the most here?"
     selects = "".join([_get_select(v,i) for i,v in enumerate(multichoice_choices)])
     return """
 <div class="question" id="q{id}">
@@ -78,33 +79,35 @@ def process_answer(data):
         local_data = dict([(k[1:],v) for (k,v) in data.items() if k.startswith(str(i))])
         print("for I=",i," data:",local_data)
         if 'ans' in local_data:
-            key, identity = decode_answer(local_data["ans"])
-            print("key",key,"id",identity)
+            keys, identity = decode_answer(local_data["ans"])
+            print("key",keys,"id",identity)
             if "ask" in local_data: # if it's a y/n question
                 asked_key = local_data["ask"]
                 answer = (local_data["button"] == '1') # Their answer
-                if key is None: # Unknown data, might learn something
+                if keys is None: # Unknown data, might learn something
                     if answer:
                         print("LEARNING!")
                         training_set.append((identity,answer))
-                elif key == asked_key: # it should be true
+                elif asked_key in keys: # it should be true
                     if not answer:
                         good_so_far = False
                         break
-                elif key != asked_key: # it should be false
+                elif asked_key not in keys: # it should be false
                     if answer:
                         good_so_far = False
                         break
+                else:
+                    raise Exception("Logic Error")
             else: # Otherwise, it's a choice
                 answer = multichoice_choices[int(local_data["choices"])]
                 print("Their Answer:",answer)
-                if key is None: # Don't know the answer
+                if keys is None: # Don't know the answer
                     print("LEARNING")
                     training_set.append((identity, answer))
-                elif key == answer:
+                elif answer in keys:
                     pass
                     # Correct!
-                elif key != answer:
+                elif answer not in keys:
                     print("Key:", key, "Answer:", answer)
                     good_so_far = False
                     break
@@ -155,10 +158,12 @@ def decide_image():
     if is_true:
         # a known correct image
         ask, image = random.choice(images)
+        ask = random.choice(ask)
     elif is_false:
         # a known incorrect image
         notask, image = random.choice(images)
         ask = random.choice([k for k,v in images if k is not notask])
+        ask = random.choice(ask)
     elif is_unknown:
         # an unknown image
         image = random.choice(unknown_images)
